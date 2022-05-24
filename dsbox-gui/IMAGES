@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<virtualbox-driver-spec vbox-version="VirtualBox 5.0.x" type="VIRTUALBOX">
+    <simulations-base-path>/home/ribadas/DSBOX/SIMULATIONS</simulations-base-path>
+    <images-base-path>/home/ribadas/DSBOX/IMAGES</images-base-path>
+    <bridged-interface></bridged-interface>
+    <web-server-host>localhost</web-server-host>
+    <web-server-port>18083</web-server-port>
+    <web-server-user></web-server-user>
+    <web-server-password></web-server-password>
+</virtualbox-driver-spec>
