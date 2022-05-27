@@ -4,7 +4,9 @@ import com.kodedu.terminalfx.Terminal;
 import com.kodedu.terminalfx.config.TerminalConfig;
 import com.kodedu.terminalfx.helper.IOHelper;
 import com.kodedu.terminalfx.helper.ThreadHelper;
+import es.uvigo.esei.dsbox.core.model.Host;
 import es.uvigo.esei.dsbox.core.model.execution.ExecutionSpec;
+import es.uvigo.esei.dsbox.core.gui.connection.ConnectionManager;
 import es.uvigo.esei.dsbox.gui.editor.HostNodeView;
 import es.uvigo.esei.dsbox.gui.editor.LinkView;
 import es.uvigo.esei.dsbox.gui.editor.NetworkView;
@@ -32,13 +34,13 @@ import javafx.stage.WindowEvent;
 public class SimulationModeEventProcessor extends BaseNetworkEventProcessor {
 
     private NodeView selectedNode;
-    private ExecutionSpec executionSpec;
+    private ConnectionManager connectionManager;
     private Parent parentWindow;
     HashMap<String, Stage> stages = new HashMap<>();
 
-    public SimulationModeEventProcessor(NetworkView networkView, EditActionDestination actionDestination, ExecutionSpec executionSpec, Parent parentWindow) {
+    public SimulationModeEventProcessor(NetworkView networkView, EditActionDestination actionDestination, ConnectionManager connectionManager, Parent parentWindow) {
         super(networkView, actionDestination);
-        this.executionSpec = executionSpec;
+        this.connectionManager = connectionManager;
         this.parentWindow = parentWindow;
     }
 
@@ -60,11 +62,11 @@ public class SimulationModeEventProcessor extends BaseNetworkEventProcessor {
         }
     }
 
-    private String retrieveVirtualMachineName(NetworkNodeEvent ne) {
+    private Host retrieveHost(NetworkNodeEvent ne) {
         NodeView nv = ne.nodeView;
         if (nv instanceof HostNodeView) {
             HostNodeView hnv = (HostNodeView) nv;
-            return hnv.getHost().getName();
+            return hnv.getHost();
         }
         return null;
 
@@ -72,33 +74,24 @@ public class SimulationModeEventProcessor extends BaseNetworkEventProcessor {
 
     @Override
     public void onNodeClicked(NetworkNodeEvent ne) {
-        String hostName = retrieveVirtualMachineName(ne);
-        if (hostName != null) {
+        Host host = retrieveHost(ne);
+        if (host != null) {
+            String hostName = host.getName();
             if (!stages.containsKey(hostName)) {
-                TerminalConfig defaultConfig = new TerminalConfig();
-                defaultConfig.setUnixTerminalStarter(String.format("docker exec -it %s bash", hostName));
-
-                Terminal t = new Terminal(defaultConfig, null);
-                t.setMinSize(650, 400);
-                Scene scene = new Scene(t);
-                Stage stage = new Stage();
-                stage.setTitle(hostName);
-                stage.setScene(scene);
+//                TerminalConfig defaultConfig = new TerminalConfig();
+//                defaultConfig.setUnixTerminalStarter(String.format("docker exec -it %s bash", hostName));
+//
+//                Terminal t = new Terminal(defaultConfig, null);
+//                t.setMinSize(650, 400);
+//                Scene scene = new Scene(t);
+//                Stage stage = new Stage();
+//                stage.setTitle(hostName);
+//                stage.setScene(scene);
+                Stage stage = connectionManager.createViewForHost(host, ()->{stages.remove(hostName);});
+                
+                
+                
                 stages.put(hostName, stage);
-                stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-                    public void handle(WindowEvent we) {
-                        stages.remove(hostName);
-
-                        ThreadHelper.start(() -> {
-                            while (Objects.isNull(t.getProcess())) {
-                                ThreadHelper.sleep(250);
-                            }
-                            t.getProcess().destroy();
-                            IOHelper.close(t.getInputReader(), t.getErrorReader(), t.getOutputWriter());
-                        });
-
-                    }
-                });
                 stage.showAndWait();
                 stage.toFront();
             } else {
@@ -192,6 +185,8 @@ public class SimulationModeEventProcessor extends BaseNetworkEventProcessor {
             selectedNode = null;
         }
     }
+    
+    
 
     private void refreshNodePosition(NodeView nv, Position newPosition) {
         networkView.moveNodeView(nv, newPosition);

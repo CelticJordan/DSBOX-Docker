@@ -5,6 +5,7 @@ import es.uvigo.esei.dsbox.core.model.SimulationSpec;
 import es.uvigo.esei.dsbox.core.model.exceptions.DSBOXException;
 import es.uvigo.esei.dsbox.core.model.execution.ExecutionSpec;
 import es.uvigo.esei.dsbox.core.model.execution.VMDriverSpec;
+import es.uvigo.esei.dsbox.docker.execution.DockerDriverSpec;
 import es.uvigo.esei.dsbox.gui.controllers.Factory;
 import es.uvigo.esei.dsbox.gui.controllers.MainController;
 import es.uvigo.esei.dsbox.gui.editor.NetworkEditor;
@@ -300,7 +301,8 @@ public class MainWindow extends Parent implements NetworkEditorObserver {
 //                                          -> habilitar pasteCommand cuando se haya copiado (y deshabilitar copyCommand)
     }
 
-    private void activateSimulationMode(ExecutionSpec executionSpec) {
+    private void activateSimulationMode(ExecutionSpec executionSpec) throws DSBOXException {
+        System.out.println(executionSpec.getVmDriverSpec() instanceof DockerDriverSpec);
         this.inEditionMode = false;
         this.isEdited = false;
         editor.activateSimulationMode(executionSpec);
@@ -546,7 +548,8 @@ public class MainWindow extends Parent implements NetworkEditorObserver {
                 
                 activateSimulationMode(controller.getExecutionSpec());
 
-            } catch (VMDriverException ex) {
+            } catch (VMDriverException | DSBOXException ex) {
+                ex.printStackTrace();
                 Alert alert = new Alert(AlertType.ERROR);
                 alert.setTitle("Simulation error");
                 alert.setHeaderText("Simulation error (start)");

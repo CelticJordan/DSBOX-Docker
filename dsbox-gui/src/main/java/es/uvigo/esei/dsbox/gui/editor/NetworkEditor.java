@@ -3,7 +3,9 @@ package es.uvigo.esei.dsbox.gui.editor;
 import es.uvigo.esei.dsbox.core.model.HostType;
 import es.uvigo.esei.dsbox.core.model.NetworkType;
 import es.uvigo.esei.dsbox.core.model.SimulationSpec;
+import es.uvigo.esei.dsbox.core.model.exceptions.DSBOXException;
 import es.uvigo.esei.dsbox.core.model.execution.ExecutionSpec;
+import es.uvigo.esei.dsbox.gui.controllers.Factory;
 import es.uvigo.esei.dsbox.gui.editor.actions.EditAction;
 import es.uvigo.esei.dsbox.gui.editor.actions.EditActionDestination;
 import es.uvigo.esei.dsbox.gui.editor.events.CreateNodeEventProcessor;
@@ -163,11 +165,11 @@ public class NetworkEditor extends Parent implements EditActionDestination {
         // zoom a 1.0
     }
 
-    public void activateSimulationMode(ExecutionSpec executionSpec) {
+    public void activateSimulationMode(ExecutionSpec executionSpec) throws DSBOXException {
         disableAllButtons();
         selectButton.setDisable(false);
         selectButton.setSelected(true);
-        networkView.setDelegate(new SimulationModeEventProcessor(networkView, this, executionSpec, mainWindow));
+        networkView.setDelegate(new SimulationModeEventProcessor(networkView, this, Factory.createConnectionManager(executionSpec), mainWindow));
 
     }
 

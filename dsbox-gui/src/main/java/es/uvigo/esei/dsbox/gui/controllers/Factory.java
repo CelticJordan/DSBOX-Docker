@@ -4,10 +4,13 @@ import es.uvigo.esei.dsbox.core.config.DSBOXConfig;
 import es.uvigo.esei.dsbox.core.manager.VMDriver;
 import es.uvigo.esei.dsbox.core.model.VMType;
 import es.uvigo.esei.dsbox.core.model.exceptions.DSBOXException;
+import es.uvigo.esei.dsbox.core.model.execution.ExecutionSpec;
 import es.uvigo.esei.dsbox.core.model.execution.VMDriverSpec;
 import es.uvigo.esei.dsbox.docker.execution.DockerDriverSpec;
 import es.uvigo.esei.dsbox.docker.gui.DockerDriverSpecEditorPanel;
+import es.uvigo.esei.dsbox.docker.gui.connection.DockerConnectionManager;
 import es.uvigo.esei.dsbox.docker.manager.DockerDriver;
+import es.uvigo.esei.dsbox.core.gui.connection.ConnectionManager;
 import es.uvigo.esei.dsbox.virtualbox.execution.VirtualBoxDriverSpec;
 import es.uvigo.esei.dsbox.virtualbox.gui.VBoxDriverSpecEditorPanel;
 import es.uvigo.esei.dsbox.virtualbox.manager.VirtualBoxDriver;
@@ -92,5 +95,13 @@ public class Factory {
             throw new DSBOXException("Wrong VMDriverSpec");
         }
 
+    }
+    
+    public static ConnectionManager createConnectionManager(ExecutionSpec executionSpec) throws DSBOXException{
+        if (executionSpec.getVmDriverSpec() instanceof DockerDriverSpec){
+            return new DockerConnectionManager(executionSpec, executionSpec.getVmDriverSpec());
+        } else {
+            throw new DSBOXException("Unable to create connection manager");
+        }
     }
 }

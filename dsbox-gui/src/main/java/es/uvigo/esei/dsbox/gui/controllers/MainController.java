@@ -143,7 +143,7 @@ public class MainController {
         // Control download -> cancel download => abort startSimulation
         
         executionSpec = engine.initSimulation(simulationName, simulationSpec.getNetworkSpec());
-        
+        executionSpec.setVmDriverSpec(this.VMDriverSpec);
         engine.startSimulation(simulationName, executionSpec);
         runningSimulationName = simulationName;
         simulationIsRunning = true;
