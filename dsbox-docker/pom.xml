@@ -18,12 +18,12 @@
             <version>${project.version}</version>
         </dependency>
 		
-		<!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
-		<dependency>
-    		<groupId>commons-net</groupId>
-    		<artifactId>commons-net</artifactId>
-    		<version>3.8.0</version>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/commons-net/commons-net -->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.8.0</version>
+        </dependency>
         
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
@@ -37,6 +37,74 @@
             <version>${javafx.version}</version>
         </dependency>
         
+        <!-- Add dependency for Java 8-->
+        <dependency>
+            <groupId>com.kodedu.terminalfx</groupId>
+            <artifactId>terminalfx</artifactId>
+            <version>1.1.0</version>
+        </dependency>
+		
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.pty4j/pty4j -->
+        <dependency>
+            <groupId>org.jetbrains.pty4j</groupId>
+            <artifactId>pty4j</artifactId>
+            <version>0.12.7</version>
+            
+        </dependency>
+        
     </dependencies>
+    <repositories>
+        <repository>
+            <id>terminalfx-repo</id>
+            <url>https://github.com/javaterminal/terminalfx/raw/master/releases</url>
+        </repository>
+        <!-- <repository>
+            <id>bintray-jetbrains-pty4j</id>
+          <name>bintray</name>
+            <url>https://jetbrains.bintray.com/pty4j</url>
+        </repository> 
+        <repository>
+            <id>pty4j-releases</id>
+            <url>https://github.com/javaterminal/pty4j/raw/master/releases</url>
+        </repository> -->
+        <repository>
+            <id>javacomm-repo</id>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <url>https://www.sparetimelabs.com/maven2</url>
+        </repository>
+        <repository>
+            <id>sonatype.snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+        
+        <repository>
+            <id>central</id>
+            <name>Maven Central</name>
+            <url>https://repo1.maven.org/maven2/</url>
+            <releases>
+                <enabled>true</enabled>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+        </repository>
+        <repository>
+            <id>bintray-jetbrains-pty4j</id>
+            <name>bintray</name>
+            <url>https://jetbrains.bintray.com/pty4j</url>
+        </repository>
+        <repository>
+            <id>pty4j-releases</id>
+            <url>https://github.com/javaterminal/pty4j/raw/master/releases</url>
+        </repository>
+        
+        
+    </repositories>
     
 </project>
